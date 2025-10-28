@@ -1,98 +1,60 @@
-🛒 Amazon Web Scraper
+# 🛒 Amazon Product Data Scraper using Python
 
-A Python-based web scraping project that extracts product details from Amazon using BeautifulSoup and requests. This scraper collects data like product name, price, rating, and availability — perfect for analyzing pricing trends or product comparisons.
+## 📘 Project Overview
+This project focuses on **extracting product information from Amazon** using **Python**, **BeautifulSoup**, and **Requests**.  
+The goal was to collect data such as product titles, prices, ratings, and reviews — and store it in a structured format for analysis or comparison.
 
-🚀 Features
+---
 
-Scrapes product information (title, price, rating, reviews, etc.)
+## 🧩 Tools and Technologies
+- **Python 3** — core programming language  
+- **Jupyter Notebook** — for code execution and data exploration  
+- **BeautifulSoup (bs4)** — for parsing HTML content  
+- **Requests** — for sending HTTP requests  
+- **Pandas** — for data storage and manipulation  
 
-Supports multiple product pages
+---
 
-Saves data into a structured CSV/Excel format
+## ⚙️ Project Workflow
 
-Handles request delays to avoid blocking
+### 1. Data Collection
+- Selected Amazon product URLs for categories such as electronics, clothing, and accessories.  
+- Used **HTTP GET requests** to fetch HTML content from Amazon product or search pages.
 
-Easy to modify for different keywords or categories
+### 2. Data Extraction
+- Parsed the HTML using **BeautifulSoup** to identify specific tags containing:
+  - Product **title**
+  - Product **price**
+  - **Rating** and **review count**
+  - **Availability** status
+- Extracted text content using tag attributes and CSS selectors.
 
-🧠 Technologies Used
+### 3. Data Cleaning
+- Removed missing, duplicate, or null entries.  
+- Converted prices and ratings to numerical values.  
+- Formatted and standardized data for consistency.
 
-Python 3
+### 4. Data Storage
+- Structured extracted data into a **Pandas DataFrame**.  
+- Exported the results into a **CSV file (`amazon_data.csv`)** for further analysis or visualization.
 
-BeautifulSoup4
+---
 
-Requests
+## 🧮 Example Code Snippet
+```python
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
 
-Pandas
+url = "https://www.amazon.in/s?k=wireless+headphones"
+headers = {"User-Agent": "Mozilla/5.0"}
 
-📁 Project Structure
-AmazonWebScraper/
-│
-├── AmazonWebScraper.ipynb   # Main Jupyter Notebook
-├── requirements.txt          # Dependencies (optional)
-├── README.md                 # Project documentation
-└── output.csv                # Sample output file (generated)
+response = requests.get(url, headers=headers)
+soup = BeautifulSoup(response.content, "html.parser")
 
-⚙️ Installation
+titles = [item.get_text(strip=True) for item in soup.select("h2 a span")]
+prices = [item.get_text(strip=True) for item in soup.select(".a-price-whole")]
 
-git clone https://github.com/<your-username>/AmazonWebScraper.git
-cd AmazonWebScraper
-
-pip install -r requirements.txt
-
-pip install requests beautifulsoup4 pandas
-
-jupyter notebook AmazonWebScraper.ipynb
-
-🧩 How It Works
-
-Sends a request to Amazon’s search page with a product keyword.
-
-Parses HTML using BeautifulSoup to extract details:
-
-Product title
-
-Price
-
-Rating
-
-Review count
-
-Stores all results into a CSV for further analysis.
-
-⚠️ Disclaimer
-
-This project is for educational purposes only.
-Amazon’s Terms of Service prohibit scraping without permission.
-Use responsibly and avoid making frequent requests.
-
-💡 Future Improvements
-
-Add proxy rotation and user-agent randomization
-
-Integrate with Selenium for dynamic content scraping
-
-Build a small Flask or Streamlit dashboard for data visualization
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Jupyter Notebook
-
+df = pd.DataFrame({"Title": titles, "Price": prices})
+df.to_csv("amazon_data.csv", index=False)
+df.head()
