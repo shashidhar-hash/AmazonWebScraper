@@ -33,6 +33,7 @@ AmazonWebScraper/
 └── output.csv                # Sample output file (generated)
 
 ⚙️ Installation
+
 git clone https://github.com/<your-username>/AmazonWebScraper.git
 cd AmazonWebScraper
 
